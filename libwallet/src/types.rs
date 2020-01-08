@@ -81,6 +81,7 @@ where
 		mnemonic_length: usize,
 		password: ZeroingString,
 		test_mode: bool,
+		init_no_scanning: bool,
 	) -> Result<(), Error>;
 
 	///

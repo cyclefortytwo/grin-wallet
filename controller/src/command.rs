@@ -93,6 +93,7 @@ where
 		args.list_length,
 		args.password.clone(),
 		false,
+		false,
 	)?;
 
 	let m = p.get_mnemonic(None, args.password)?;
@@ -917,7 +918,7 @@ where
 			},
 		};
 		warn!("Starting output scan from height {} ...", start_height);
-		let result = api.scan(m, Some(start_height), args.delete_unconfirmed);
+		let result = api.scan(m, Some(start_height), None, args.delete_unconfirmed);
 		match result {
 			Ok(_) => {
 				warn!("Wallet check complete",);

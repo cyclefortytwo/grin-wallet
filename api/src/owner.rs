@@ -477,6 +477,7 @@ where
 			let t = self.status_tx.lock();
 			t.clone()
 		};
+		info!("refresh_from_node: {}", refresh_from_node);
 		let refresh_from_node = match self.updater_running.load(Ordering::Relaxed) {
 			true => false,
 			false => refresh_from_node,
@@ -1236,6 +1237,7 @@ where
 		&self,
 		keychain_mask: Option<&SecretKey>,
 		start_height: Option<u64>,
+		end_height: Option<u64>,
 		delete_unconfirmed: bool,
 	) -> Result<(), Error> {
 		let tx = {
@@ -1246,6 +1248,7 @@ where
 			self.wallet_inst.clone(),
 			keychain_mask,
 			start_height,
+			end_height,
 			delete_unconfirmed,
 			&tx,
 		)
@@ -1531,6 +1534,7 @@ where
 			mnemonic_length as usize,
 			password,
 			self.doctest_mode,
+			false,
 		)
 	}
 

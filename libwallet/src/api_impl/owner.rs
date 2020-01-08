@@ -34,6 +34,7 @@ use crate::{
 use crate::{Error, ErrorKind};
 use ed25519_dalek::PublicKey as DalekPublicKey;
 use ed25519_dalek::SecretKey as DalekSecretKey;
+use std::cmp;
 
 use std::sync::mpsc::Sender;
 use std::sync::Arc;
@@ -656,6 +657,7 @@ pub fn scan<'a, L, C, K>(
 	wallet_inst: Arc<Mutex<Box<dyn WalletInst<'a, L, C, K>>>>,
 	keychain_mask: Option<&SecretKey>,
 	start_height: Option<u64>,
+	end_height: Option<u64>,
 	delete_unconfirmed: bool,
 	status_send_channel: &Option<Sender<StatusMessage>>,
 ) -> Result<(), Error>
@@ -675,12 +677,17 @@ where
 		None => 1,
 	};
 
+	let end_height = match end_height {
+		Some(h) => cmp::min(tip.0, h),
+		None => tip.0,
+	};
+
 	let mut info = scan::scan(
 		wallet_inst.clone(),
 		keychain_mask,
 		delete_unconfirmed,
 		start_height,
-		tip.0,
+		end_height,
 		status_send_channel,
 	)?;
 	info.hash = tip.1;

@@ -1284,6 +1284,7 @@ pub trait OwnerRpcS {
 		&self,
 		token: Token,
 		start_height: Option<u64>,
+		end_height: Option<u64>,
 		delete_unconfirmed: bool,
 	) -> Result<(), ErrorKind>;
 
@@ -2153,12 +2154,14 @@ where
 		&self,
 		token: Token,
 		start_height: Option<u64>,
+		end_height: Option<u64>,
 		delete_unconfirmed: bool,
 	) -> Result<(), ErrorKind> {
 		Owner::scan(
 			self,
 			(&token.keychain_mask).as_ref(),
 			start_height,
+			end_height,
 			delete_unconfirmed,
 		)
 		.map_err(|e| e.kind())
